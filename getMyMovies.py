@@ -4,15 +4,29 @@ import re
 import csv
 import time
 import random
+import lxml
+import argparse
+import os
 
-def main(path_csv, douban_id):
+def generate_csv():
     headers = {
         'User-Agent':
         'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.63 Safari/537.36'
     }
 
+    parser = argparse.ArgumentParser()
+    parser.add_argument('outputPath', help='output file path', type=str)
+    parser.add_argument('fileName', help='file name', type=str)
+    parser.add_argument('userID', help='douban ID of the user', type=int)
+    args = parser.parse_args()
+    
+    output_path = args.outputPath
+    file_name = args.fileName
+    file_full_path = os.path.join(output_path, file_name)
+    douban_id = args.userID
+
     # write movie information to csv
-    with open('movie.csv', 'w',encoding="utf-8-sig", newline='') as file_to:
+    with open(file_full_path, 'w',encoding="utf-8-sig", newline='') as file_to:
         csv_write = csv.writer(file_to)
         title = ['title', 'Directors', 'casts', 'nation', 'year', 'imdbID', 'douban_url', 'Rating', 'Review', 'WatchedDate'  ]
         csv_write.writerow(title)   # write title to csv file
@@ -102,4 +116,4 @@ def main(path_csv, douban_id):
 
 
 if __name__ == '__main__':
-    main('movie.csv', 12345678)
+    generate_csv()
